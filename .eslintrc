@@ -22,6 +22,21 @@
 		"no-console": "off",
 		"@typescript-eslint/explicit-function-return-type": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
-		"import/extensions": "off"
+		"import/extensions": "off",
+		"lines-between-class-members": [
+			"error",
+			"always",
+			{ "exceptAfterSingleLine": true }
+		]
+	},
+	"settings": {
+		"react": {
+			"version": "999.999.999"
+		},
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".jsx", ".ts", ".tsx"]
+			}
+		}
 	}
 }
