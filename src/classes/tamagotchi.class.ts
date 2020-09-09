@@ -3,19 +3,23 @@ import constants from '../constants';
 
 export default class Tamagotchi {
 	birth: Date;
-	food: number;
+	food?: number;
 	age: number;
 	maxAge: number;
 	alive: boolean;
+	sleeping: boolean;
+	energy: number;
 	ageingTimer: ReturnType<typeof setInterval>;
 
 	// Constructor
-	constructor(birth: Date, food: number) {
+	constructor(birth: Date, food: number = constants.maxFood) {
 		this.birth = birth;
 		this.food = food;
 		this.age = 0;
-		this.maxAge = 5;
+		this.maxAge = constants.maxAge;
 		this.alive = true;
+		this.sleeping = false;
+		this.energy = constants.maxEnergy;
 
 		this.ageingTimer = setInterval(() => {
 			this.increaseAge();
@@ -34,6 +38,21 @@ export default class Tamagotchi {
 		// If the pet has become too old
 		else if (this.age > this.maxAge) {
 			this.die();
+		}
+
+		// Check if the pet is asleep
+		if (this.isSleeping()) {
+			// If so, increase its energy level
+			this.energy += 1;
+		}
+		// Otherwise, decrease its energy level
+		else {
+			this.energy -= 1;
+
+			// Check if the pet needs to sleep
+			if (this.energy <= 0) {
+				this.setSleeping(true);
+			}
 		}
 	}
 
@@ -75,10 +94,27 @@ export default class Tamagotchi {
 		return this.alive;
 	}
 
+	// Is sleeping
+	isSleeping() {
+		return this.sleeping;
+	}
+
+	// Get energy
+	getEnergy() {
+		return this.energy;
+	}
+
+	// Put to sleep
+	setSleeping(newState: boolean) {
+		this.sleeping = newState;
+	}
+
 	// Output status
 	outputStatus() {
 		console.log(
-			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}`
+			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}. Energy: ${this.getEnergy()} (${
+				this.isSleeping() ? 'sleeping' : 'awake'
+			})`
 		);
 	}
 }
