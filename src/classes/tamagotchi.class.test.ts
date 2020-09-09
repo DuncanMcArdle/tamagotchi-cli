@@ -1,6 +1,6 @@
 import Tamagotchi from './tamagotchi.class';
 
-const { maxAge, maxFood } = require('../constants');
+const { maxAge, maxFood, maxEnergy } = require('../constants');
 
 describe('Tamagotchi', () => {
 	let tamagotchi;
@@ -70,6 +70,45 @@ describe('Tamagotchi', () => {
 
 			// Check that the pet has died
 			expect(tamagotchi.isAlive()).toBe(false);
+		});
+	});
+
+	describe('Sleeping', () => {
+		test('Pet can be put to sleep', () => {
+			tamagotchi.setSleeping(true);
+			expect(tamagotchi.isSleeping()).toBe(true);
+		});
+
+		test('Pet can be woken up', () => {
+			tamagotchi.setSleeping(true);
+			tamagotchi.setSleeping(false);
+			expect(tamagotchi.isSleeping()).toBe(false);
+		});
+
+		test('Pet loses energy whilst awake', () => {
+			tamagotchi.increaseAge();
+			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+		});
+
+		test('Pet gains energy whilst asleep', () => {
+			tamagotchi.increaseAge();
+			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+			tamagotchi.setSleeping(true);
+			tamagotchi.increaseAge();
+			expect(tamagotchi.getEnergy()).toBe(maxEnergy);
+		});
+
+		test('Pet goes to sleep when out of energy', () => {
+			// Use up all of the pet's energy
+			for (let i = 0; i < maxEnergy; i += 1) {
+				tamagotchi.increaseAge();
+
+				// Feed the pet to ensure it doesn't die
+				tamagotchi.feed();
+			}
+
+			// Check that the pet has fallen asleep
+			expect(tamagotchi.isSleeping()).toBe(true);
 		});
 	});
 });

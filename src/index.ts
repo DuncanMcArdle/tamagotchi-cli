@@ -1,5 +1,6 @@
 import { log, clear } from 'console';
 import readline from 'readline';
+import constants from './constants';
 import Tamagotchi from './classes/tamagotchi.class';
 
 // Initialise miscellaneous variables
@@ -30,7 +31,7 @@ const recursiveReadLine = () => {
 		// Check if the Tamagotchi has died
 		if (!tamagotchi.isAlive()) {
 			// Create a new Tamagotchi
-			tamagotchi = new Tamagotchi(new Date(), 10);
+			tamagotchi = new Tamagotchi(new Date());
 			log('A new Tamagotchi was born!');
 		} else {
 			// Switch based on the command entered
@@ -38,11 +39,53 @@ const recursiveReadLine = () => {
 				// Feed the Tamagotchi
 				case 'f':
 				case 'feed': {
-					log(
-						tamagotchi.feed()
-							? 'Your tamagotchi was fed'
-							: 'Your tamagotchi is full'
-					);
+					// Check if the pet is sleeping
+					if (tamagotchi.isSleeping()) {
+						log("You can't feed a sleeping pet, wake it up first");
+					} else {
+						// Attempt to feed the pet
+						log(
+							tamagotchi.feed()
+								? 'Your tamagotchi was fed'
+								: 'Your tamagotchi is full'
+						);
+					}
+					break;
+				}
+
+				// Put the Tamagotchi to sleep
+				case 's':
+				case 'sleep': {
+					if (!tamagotchi.isSleeping()) {
+						tamagotchi.setSleeping(true);
+						log('Your tamagotchi was put to sleep');
+					} else {
+						log('Your tamagotchi is already sleeping');
+					}
+					break;
+				}
+
+				// Wake the Tamagotchi up
+				case 'w':
+				case 'wakeup': {
+					// Check if the pet is sleeping
+					if (tamagotchi.isSleeping()) {
+						// Check if the pet has enough energy to wake up
+						if (
+							tamagotchi.getEnergy() >=
+							constants.minimumWakeupEnergy
+						) {
+							// Wake the pet up
+							tamagotchi.setSleeping(false);
+							log('Your tamagotchi was woken up');
+						} else {
+							log(
+								`Your tamagotchi doesn't have the energy to wake up yet (${constants.minimumWakeupEnergy} minimum)`
+							);
+						}
+					} else {
+						log('Your tamagotchi is not sleeping');
+					}
 					break;
 				}
 
@@ -60,7 +103,7 @@ const recursiveReadLine = () => {
 };
 
 // Create a Tamagotchi
-tamagotchi = new Tamagotchi(new Date(), 10);
+tamagotchi = new Tamagotchi(new Date());
 clear();
 log('A new Tamagotchi was born!');
 
