@@ -35,6 +35,17 @@ const recursiveReadLine = () => {
 		} else {
 			// Switch based on the command entered
 			switch (command) {
+				// Feed the Tamagotchi
+				case 'f':
+				case 'feed': {
+					log(
+						tamagotchi.feed()
+							? 'Your tamagotchi was fed'
+							: 'Your tamagotchi is full'
+					);
+					break;
+				}
+
 				// Unknown command / Status update
 				default: {
 					log('Command not recognised, try again.');

@@ -16,6 +16,20 @@ export default class Tamagotchi {
 		this.age = 0;
 		this.maxAge = 10;
 		this.alive = true;
+
+	}
+	// Feed
+	feed() {
+		if (this.food >= this.maxFood) {
+			return false;
+		}
+		this.food += 1;
+		return true;
+	}
+
+	// Get food
+	getFood() {
+		return this.food;
 	}
 
 	// Output status
