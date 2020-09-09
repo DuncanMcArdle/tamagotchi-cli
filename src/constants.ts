@@ -3,8 +3,10 @@
  */
 
 const maxAge = 10;
+const maxFood = 10;
 
 // Export the constant, freezing them from change
 export default module.exports = Object.freeze({
 	maxAge,
+	maxFood,
 });

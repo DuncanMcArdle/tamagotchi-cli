@@ -1,9 +1,9 @@
 import { clear } from 'console';
+import constants from '../constants';
 
 export default class Tamagotchi {
 	birth: Date;
 	food: number;
-	maxFood: number;
 	age: number;
 	maxAge: number;
 	alive: boolean;
@@ -13,7 +13,6 @@ export default class Tamagotchi {
 	constructor(birth: Date, food: number) {
 		this.birth = birth;
 		this.food = food;
-		this.maxFood = 10;
 		this.age = 0;
 		this.maxAge = 5;
 		this.alive = true;
@@ -26,9 +25,14 @@ export default class Tamagotchi {
 	// Age
 	increaseAge() {
 		this.age += 1;
+		this.food -= 1;
 
+		// If the pet has run out of food
+		if (this.food <= 0) {
+			this.die();
+		}
 		// If the pet has become too old
-		if (this.age > this.maxAge) {
+		else if (this.age > this.maxAge) {
 			this.die();
 		}
 	}
@@ -54,7 +58,7 @@ export default class Tamagotchi {
 
 	// Feed
 	feed() {
-		if (this.food >= this.maxFood) {
+		if (this.food >= constants.maxFood) {
 			return false;
 		}
 		this.food += 1;

@@ -1,10 +1,10 @@
 import Tamagotchi from './tamagotchi.class';
 
-const { maxAge } = require('../constants');
+const { maxAge, maxFood } = require('../constants');
 
 describe('Tamagotchi', () => {
 	let tamagotchi;
-	const startingFood = 9;
+	const startingFood = maxFood - 1;
 
 	beforeEach(() => {
 		tamagotchi = new Tamagotchi(new Date(), startingFood);
@@ -33,6 +33,20 @@ describe('Tamagotchi', () => {
 			tamagotchi.increaseAge();
 			expect(tamagotchi.getFood()).toBe(startingFood - 1);
 		});
+
+		test('Pet dies upon running out of food', () => {
+			// Initialise a new pet, with minimum food
+			tamagotchi = new Tamagotchi(new Date(), 1);
+
+			// Age the pet
+			tamagotchi.increaseAge();
+
+			// Check that the pet has run out of food
+			expect(tamagotchi.getFood()).toBe(0);
+
+			// Check that the pet has died
+			expect(tamagotchi.isAlive()).toBe(false);
+		});
 	});
 
 	describe('Ageing', () => {
@@ -51,7 +65,7 @@ describe('Tamagotchi', () => {
 				tamagotchi.increaseAge();
 			}
 
-			// Check that the pet has reahed maximum age
+			// Check that the pet has reached maximum age
 			expect(tamagotchi.getAge()).toBe(maxAge);
 
 			// Check that the pet has died
