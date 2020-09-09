@@ -3,11 +3,13 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
 		"start": "tsc && node dist/index.js",
 		"dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
 		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint:fix": "eslint . --fix",
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",
@@ -21,6 +23,7 @@
 	},
 	"homepage": "https://github.com/DuncanMcArdle/tamagotchi-cli#readme",
 	"devDependencies": {
+		"@types/jest": "^26.0.13",
 		"@types/node": "^14.6.4",
 		"@types/webpack-env": "^1.15.2",
 		"@typescript-eslint/eslint-plugin": "^4.1.0",
@@ -33,8 +36,10 @@
 		"eslint-plugin-prettier": "^3.1.4",
 		"eslint-plugin-react": "^7.20.0",
 		"eslint-plugin-react-hooks": "^4.0.0",
+		"jest": "^26.4.2",
 		"nodemon": "^2.0.4",
 		"prettier": "^2.1.1",
+		"ts-jest": "^26.3.0",
 		"ts-node": "^9.0.0",
 		"typescript": "^4.0.2"
 	},
