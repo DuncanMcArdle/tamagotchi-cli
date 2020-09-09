@@ -7,6 +7,7 @@ export default class Tamagotchi {
 	age: number;
 	maxAge: number;
 	alive: boolean;
+	ageingTimer: ReturnType<typeof setInterval>;
 
 	// Constructor
 	constructor(birth: Date, food: number) {
@@ -17,7 +18,21 @@ export default class Tamagotchi {
 		this.maxAge = 10;
 		this.alive = true;
 
+		this.ageingTimer = setInterval(() => {
+			this.increaseAge();
+		}, 1000);
 	}
+
+	// Age
+	increaseAge() {
+		this.age += 1;
+	}
+
+	// Get age
+	getAge() {
+		return this.age;
+	}
+
 	// Feed
 	feed() {
 		if (this.food >= this.maxFood) {
