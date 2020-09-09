@@ -36,7 +36,7 @@ describe('Tamagotchi', () => {
 
 		test('Pet dies upon running out of food', () => {
 			// Initialise a new pet, with minimum food
-			tamagotchi = new Tamagotchi(new Date(), startingFood);
+			tamagotchi = new Tamagotchi(new Date(), 1);
 
 			// Age the pet
 			tamagotchi.increaseAge();
