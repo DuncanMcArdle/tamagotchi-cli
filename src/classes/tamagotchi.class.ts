@@ -26,9 +26,14 @@ export default class Tamagotchi {
 	// Age
 	increaseAge() {
 		this.age += 1;
+		this.food -= 1;
 
+		// If the pet has run out of food
+		if (this.food <= 0) {
+			this.die();
+		}
 		// If the pet has become too old
-		if (this.age > this.maxAge) {
+		else if (this.age > this.maxAge) {
 			this.die();
 		}
 	}
