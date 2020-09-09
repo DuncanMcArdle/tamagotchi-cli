@@ -1,10 +1,10 @@
 import Tamagotchi from './tamagotchi.class';
 
-const { maxAge } = require('../constants');
+const { maxAge, maxFood } = require('../constants');
 
 describe('Tamagotchi', () => {
 	let tamagotchi;
-	const startingFood = 9;
+	const startingFood = maxFood - 1;
 
 	beforeEach(() => {
 		tamagotchi = new Tamagotchi(new Date(), startingFood);
