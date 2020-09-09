@@ -7,6 +7,7 @@ export default class Tamagotchi {
 	age: number;
 	maxAge: number;
 	alive: boolean;
+	ageingTimer: ReturnType<typeof setInterval>;
 
 	// Constructor
 	constructor(birth: Date, food: number) {
@@ -14,10 +15,43 @@ export default class Tamagotchi {
 		this.food = food;
 		this.maxFood = 10;
 		this.age = 0;
-		this.maxAge = 10;
+		this.maxAge = 5;
 		this.alive = true;
 
+		this.ageingTimer = setInterval(() => {
+			this.increaseAge();
+		}, 1000);
 	}
+
+	// Age
+	increaseAge() {
+		this.age += 1;
+
+		// If the pet has become too old
+		if (this.age > this.maxAge) {
+			this.die();
+		}
+	}
+
+	// Die
+	die() {
+		this.alive = false;
+
+		// Kill the timer
+		clearInterval(this.ageingTimer);
+
+		// Notify the user
+		clear();
+		console.log(
+			'Your Tamagotchi has passed away. Press enter to start over.'
+		);
+	}
+
+	// Get age
+	getAge() {
+		return this.age;
+	}
+
 	// Feed
 	feed() {
 		if (this.food >= this.maxFood) {
@@ -30,6 +64,11 @@ export default class Tamagotchi {
 	// Get food
 	getFood() {
 		return this.food;
+	}
+
+	// Is alive
+	isAlive() {
+		return this.alive;
 	}
 
 	// Output status
