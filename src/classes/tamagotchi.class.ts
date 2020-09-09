@@ -17,4 +17,11 @@ export default class Tamagotchi {
 		this.maxAge = 10;
 		this.alive = true;
 	}
+
+	// Output status
+	outputStatus() {
+		console.log(
+			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}`
+		);
+	}
 }
