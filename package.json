@@ -1,0 +1,39 @@
+{
+	"name": "tamagotchi-cli",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "tsc && node dist/index.js",
+		"dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/DuncanMcArdle/tamagotchi-cli.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/DuncanMcArdle/tamagotchi-cli/issues"
+	},
+	"homepage": "https://github.com/DuncanMcArdle/tamagotchi-cli#readme",
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^4.1.0",
+		"@typescript-eslint/parser": "^4.1.0",
+		"eslint": "^7.2.0",
+		"eslint-config-airbnb": "^18.2.0",
+		"eslint-config-prettier": "^6.11.0",
+		"eslint-plugin-import": "^2.21.2",
+		"eslint-plugin-jsx-a11y": "^6.3.0",
+		"eslint-plugin-prettier": "^3.1.4",
+		"eslint-plugin-react": "^7.20.0",
+		"eslint-plugin-react-hooks": "^4.0.0",
+		"nodemon": "^2.0.4",
+		"prettier": "^2.1.1",
+		"ts-node": "^9.0.0",
+		"typescript": "^4.0.2"
+	}
+}
