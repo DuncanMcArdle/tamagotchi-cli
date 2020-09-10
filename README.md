@@ -13,6 +13,10 @@ To run the CLI, first clone the repo to your local machine. Next, browse to the 
 1. Run `npm install` to install and build the solution
 2. Run `npm start` to start the application
 
+If all goes well, it should look like this:
+
+[![A sample screenshot of the Tamagoshi CLI](https://i.imgur.com/evAZjvS.png 'A sample screenshot of the Tamagoshi CLI')](https://i.imgur.com/evAZjvS.png 'A sample screenshot of the Tamagoshi CLI')
+
 ## Features
 
 In this version of the game, there are currently 5 key features, which you'll need to keep on top of in order to get your Tamgotchi to the maximum age. **Keep an eye out**, because when one of the features is in danger of killing your Tamigotchi, it'll change colour!
