@@ -6,6 +6,9 @@ const {
 	maxEnergy,
 	poopingThreshold,
 	maxPoop,
+	maxTimeSpentDiseased,
+	riskOfDisease,
+	chanceOfHealing,
 } = require('../constants');
 
 describe('Tamagotchi', () => {
@@ -13,7 +16,7 @@ describe('Tamagotchi', () => {
 	const startingFood = maxFood - 1;
 
 	beforeEach(() => {
-		tamagotchi = new Tamagotchi(new Date(), startingFood);
+		tamagotchi = new Tamagotchi(startingFood);
 	});
 
 	describe('Feeding', () => {
@@ -42,7 +45,7 @@ describe('Tamagotchi', () => {
 
 		test('Pet dies upon running out of food', () => {
 			// Initialise a new pet, with minimum food
-			tamagotchi = new Tamagotchi(new Date(), 1);
+			tamagotchi = new Tamagotchi(1);
 
 			// Age the pet
 			tamagotchi.increaseAge();
@@ -109,9 +112,10 @@ describe('Tamagotchi', () => {
 			for (let i = 0; i < maxEnergy; i += 1) {
 				tamagotchi.increaseAge();
 
-				// Feed and clean the pet to ensure it doesn't die
+				// Feed, clean and heal the pet to ensure it doesn't die
 				tamagotchi.feed();
 				tamagotchi.clean();
+				tamagotchi.heal();
 			}
 
 			// Check that the pet has fallen asleep
@@ -131,7 +135,7 @@ describe('Tamagotchi', () => {
 
 		test('Pet poops when exceeding the pooping threshold', () => {
 			// Initialise a new pet, with minimum food
-			tamagotchi = new Tamagotchi(new Date(), 1);
+			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop
 			for (let i = 0; i < poopingThreshold; i += 1) {
@@ -144,7 +148,7 @@ describe('Tamagotchi', () => {
 
 		test('Pet dies when not properly cleaned', () => {
 			// Initialise a new pet, with minimum food
-			tamagotchi = new Tamagotchi(new Date(), 1);
+			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop the maximum amount
 			for (let i = 0; i < maxPoop * poopingThreshold; i += 1) {
@@ -157,7 +161,7 @@ describe('Tamagotchi', () => {
 
 		test('Cleaning a pet decreases the amount of poop around it', () => {
 			// Initialise a new pet, with minimum food
-			tamagotchi = new Tamagotchi(new Date(), 1);
+			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop
 			for (let i = 0; i < poopingThreshold; i += 1) {
@@ -176,6 +180,56 @@ describe('Tamagotchi', () => {
 
 		test("Pet's who have not pooped cannot be cleaned", () => {
 			expect(tamagotchi.clean()).toBe(false);
+		});
+	});
+
+	describe('Disease', () => {
+		test("Pet's diseased state is retrieved successfully", () => {
+			expect(tamagotchi.isDiseased()).toBe(false);
+		});
+
+		test.skip('Pet becomes diseased when odds indicate it', () => {
+			jest.resetModules();
+
+			// Set the odds of becoming diseased to 100%
+			// TODO
+
+			// Age the pet
+			tamagotchi.increaseAge();
+
+			// Expect the pet to have become diseased
+			expect(tamagotchi.isDiseased()).toBe(true);
+		});
+
+		test.skip('Pet can be healed when diseased', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Set the odds of healing disease to 100%
+			// TODO
+
+			// Attempt to heal the pet
+			tamagotchi.heal();
+
+			// Expect the pet to have been healed
+			expect(tamagotchi.isDiseased()).toBe(false);
+		});
+
+		test('Pet dies when not healed from disease quickly enough', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Age the pet to the point of death by disease
+			for (let i = 0; i < maxTimeSpentDiseased; i += 1) {
+				tamagotchi.increaseAge();
+
+				// Feed and clean the pet to ensure it doesn't die for other reasons
+				tamagotchi.feed();
+				tamagotchi.clean();
+			}
+
+			// Expect the pet to have died
+			expect(tamagotchi.isDiseased()).toBe(true);
 		});
 	});
 });

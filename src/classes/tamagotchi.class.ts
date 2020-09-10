@@ -2,7 +2,6 @@ import { clear } from 'console';
 import constants from '../constants';
 
 export default class Tamagotchi {
-	birth: Date;
 	food?: number;
 	age: number;
 	maxAge: number;
@@ -12,10 +11,11 @@ export default class Tamagotchi {
 	ageingTimer: ReturnType<typeof setInterval>;
 	poop: number;
 	foodSincePoop: number;
+	diseased: boolean;
+	timeSpentDiseased: number;
 
 	// Constructor
-	constructor(birth: Date, food: number = constants.maxFood) {
-		this.birth = birth;
+	constructor(food: number = constants.maxFood) {
 		this.food = food;
 		this.age = 0;
 		this.maxAge = constants.maxAge;
@@ -24,6 +24,8 @@ export default class Tamagotchi {
 		this.energy = constants.maxEnergy;
 		this.poop = 0;
 		this.foodSincePoop = 0;
+		this.diseased = false;
+		this.timeSpentDiseased = 0;
 
 		this.ageingTimer = setInterval(() => {
 			this.increaseAge();
@@ -43,19 +45,35 @@ export default class Tamagotchi {
 		else if (this.age > this.maxAge) {
 			this.die('old age');
 		}
+		// If the pet has spent too long with a disease
+		else if (
+			this.isDiseased() &&
+			this.timeSpentDiseased + 1 >= constants.maxTimeSpentDiseased
+		) {
+			this.die('disease');
+		} else {
+			// Check if the pet is asleep
+			if (this.isSleeping()) {
+				// If so, increase its energy level
+				this.energy += 1;
+			}
+			// Otherwise, decrease its energy level
+			else {
+				this.energy -= 1;
 
-		// Check if the pet is asleep
-		if (this.isSleeping()) {
-			// If so, increase its energy level
-			this.energy += 1;
-		}
-		// Otherwise, decrease its energy level
-		else {
-			this.energy -= 1;
+				// Check if the pet needs to sleep
+				if (this.energy <= 0) {
+					this.setSleeping(true);
+				}
+			}
 
-			// Check if the pet needs to sleep
-			if (this.energy <= 0) {
-				this.setSleeping(true);
+			// Check if the pet is current diseased
+			if (this.isDiseased()) {
+				this.timeSpentDiseased += 1;
+			}
+			// Randomly decide whether or not to give the pet a disease
+			else if (Math.random() * 99 + 1 <= constants.riskOfDisease) {
+				this.diseased = true;
 			}
 		}
 	}
@@ -152,6 +170,26 @@ export default class Tamagotchi {
 		return true;
 	}
 
+	// Heal the pet
+	heal() {
+		if (!this.isDiseased()) {
+			return false;
+		}
+
+		// Attempt to heal the pet
+		if (Math.random() * 99 + 1 <= constants.chanceOfHealing) {
+			this.diseased = false;
+			this.timeSpentDiseased = 0;
+			return true;
+		}
+		return false;
+	}
+
+	// Check if the pet is diseased
+	isDiseased() {
+		return this.diseased;
+	}
+
 	// Output status
 	outputStatus() {
 		console.log(
@@ -159,5 +197,14 @@ export default class Tamagotchi {
 				this.isSleeping() ? 'sleeping' : 'awake'
 			}). Poop: ${this.getPoop()}. Food since last poop: ${this.getFoodSincePoop()}`
 		);
+
+		// Check if the pet is diseased
+		if (this.isDiseased()) {
+			console.log(
+				`WARNING: Your pet has a disease! It will die in ${
+					constants.maxTimeSpentDiseased - this.timeSpentDiseased
+				} seconds if you do not (h)eal it`
+			);
+		}
 	}
 }
