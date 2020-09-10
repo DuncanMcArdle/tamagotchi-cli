@@ -83,6 +83,7 @@ export default class Game {
 		log('---');
 
 		// Explain the available commands to the user
+		log('To interact with your Tamagotchi, simply press the key corresponding to your desired command.');
 		log('Available commands: (f)eed / (s)leep / (c)lean / e(x)it. Or enter anything else for a status update.');
 
 		// Check if the pet is diseased
