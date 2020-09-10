@@ -228,33 +228,6 @@ describe('Tamagotchi', () => {
 			expect(tamagotchi.isDiseased()).toBe(false);
 		});
 
-		test.skip('Pet becomes diseased when odds indicate it', () => {
-			jest.resetModules();
-
-			// Set the odds of becoming diseased to 100%
-			// TODO
-
-			// Age the pet
-			tamagotchi.increaseAge();
-
-			// Expect the pet to have become diseased
-			expect(tamagotchi.isDiseased()).toBe(true);
-		});
-
-		test.skip('Pet can be healed when diseased', () => {
-			// Manually disease the pet
-			tamagotchi.diseased = true;
-
-			// Set the odds of healing disease to 100%
-			// TODO
-
-			// Attempt to heal the pet
-			tamagotchi.heal();
-
-			// Expect the pet to have been healed
-			expect(tamagotchi.isDiseased()).toBe(false);
-		});
-
 		test('Pet dies when not healed from disease quickly enough', () => {
 			// Manually disease the pet
 			tamagotchi.diseased = true;
