@@ -10,6 +10,8 @@ export default class Tamagotchi {
 	sleeping: boolean;
 	energy: number;
 	ageingTimer: ReturnType<typeof setInterval>;
+	poop: number;
+	foodSincePoop: number;
 
 	// Constructor
 	constructor(birth: Date, food: number = constants.maxFood) {
@@ -20,6 +22,8 @@ export default class Tamagotchi {
 		this.alive = true;
 		this.sleeping = false;
 		this.energy = constants.maxEnergy;
+		this.poop = 0;
+		this.foodSincePoop = 0;
 
 		this.ageingTimer = setInterval(() => {
 			this.increaseAge();
@@ -33,11 +37,11 @@ export default class Tamagotchi {
 
 		// If the pet has run out of food
 		if (this.food <= 0) {
-			this.die();
+			this.die('lack of food');
 		}
 		// If the pet has become too old
 		else if (this.age > this.maxAge) {
-			this.die();
+			this.die('old age');
 		}
 
 		// Check if the pet is asleep
@@ -57,7 +61,7 @@ export default class Tamagotchi {
 	}
 
 	// Die
-	die() {
+	die(causeOfDeath: string) {
 		this.alive = false;
 
 		// Kill the timer
@@ -66,7 +70,7 @@ export default class Tamagotchi {
 		// Notify the user
 		clear();
 		console.log(
-			'Your Tamagotchi has passed away. Press enter to start over.'
+			`Your Tamagotchi died due to ${causeOfDeath}. Press enter to start over.`
 		);
 	}
 
@@ -80,6 +84,7 @@ export default class Tamagotchi {
 		if (this.food >= constants.maxFood) {
 			return false;
 		}
+		this.increaseFoodSincePoop();
 		this.food += 1;
 		return true;
 	}
@@ -109,12 +114,50 @@ export default class Tamagotchi {
 		this.sleeping = newState;
 	}
 
+	// Poop
+	doPoop() {
+		this.poop += 1;
+		this.foodSincePoop = 0;
+
+		// Check if the pet has exceeded the maximum amount of poop
+		if (this.poop >= constants.maxPoop) {
+			this.die('poor hygeine');
+		}
+	}
+
+	// Get poop amount
+	getPoop() {
+		return this.poop;
+	}
+
+	// Get food consumed since last poop
+	getFoodSincePoop() {
+		return this.foodSincePoop;
+	}
+
+	// Increase the amount of poop in the pet
+	increaseFoodSincePoop() {
+		this.foodSincePoop += 1;
+		if (this.foodSincePoop >= constants.poopingThreshold) {
+			this.doPoop();
+		}
+	}
+
+	// Clean the pet
+	clean() {
+		if (this.poop <= 0) {
+			return false;
+		}
+		this.poop -= 1;
+		return true;
+	}
+
 	// Output status
 	outputStatus() {
 		console.log(
 			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}. Energy: ${this.getEnergy()} (${
 				this.isSleeping() ? 'sleeping' : 'awake'
-			})`
+			}). Poop: ${this.getPoop()}. Food since last poop: ${this.getFoodSincePoop()}`
 		);
 	}
 }
