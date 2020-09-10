@@ -19,9 +19,7 @@ const recursiveReadLine = () => {
 	tamagotchi.outputStatus();
 
 	// Explain the available commands to the user
-	log(
-		'Available commands: (f)eed / (p)at / (s)leep / (c)lean. Or enter anything else for a status update.'
-	);
+	log('Available commands: (f)eed / (p)at / (s)leep / (c)lean. Or enter anything else for a status update.');
 
 	// Ask the user for a command
 	readLineInterface.question('Command: ', (command) => {
@@ -40,11 +38,7 @@ const recursiveReadLine = () => {
 				case 'c':
 				case 'clean': {
 					// Attempt to clean the pet
-					log(
-						tamagotchi.clean()
-							? 'You cleaned 1 poop up'
-							: "There isn't any poop to clean up"
-					);
+					log(tamagotchi.clean() ? 'You cleaned 1 poop up' : "There isn't any poop to clean up");
 					break;
 				}
 
@@ -56,11 +50,7 @@ const recursiveReadLine = () => {
 						log("You can't feed a sleeping pet, wake it up first");
 					} else {
 						// Attempt to feed the pet
-						log(
-							tamagotchi.feed()
-								? 'Your tamagotchi was fed'
-								: 'Your tamagotchi is full'
-						);
+						log(tamagotchi.feed() ? 'Your tamagotchi was fed' : 'Your tamagotchi is full');
 					}
 					break;
 				}
@@ -70,16 +60,10 @@ const recursiveReadLine = () => {
 				case 'heal': {
 					// Check if the pet has a disease
 					if (!tamagotchi.isDiseased()) {
-						log(
-							"Your pet doesn't have a disease that needs healing"
-						);
+						log("Your pet doesn't have a disease that needs healing");
 					} else {
 						// Attempt to heal the pet
-						log(
-							tamagotchi.heal()
-								? 'Your tamagotchi was healed of disease'
-								: 'Your tamagotchi was not healed, try again'
-						);
+						log(tamagotchi.heal() ? 'Your tamagotchi was healed of disease' : 'Your tamagotchi was not healed, try again');
 					}
 					break;
 				}
@@ -87,7 +71,9 @@ const recursiveReadLine = () => {
 				// Put the Tamagotchi to sleep
 				case 's':
 				case 'sleep': {
+					// Check if the pet is sleeping
 					if (!tamagotchi.isSleeping()) {
+						// Put the pet to sleep
 						tamagotchi.setSleeping(true);
 						log('Your tamagotchi was put to sleep');
 					} else {
@@ -102,17 +88,12 @@ const recursiveReadLine = () => {
 					// Check if the pet is sleeping
 					if (tamagotchi.isSleeping()) {
 						// Check if the pet has enough energy to wake up
-						if (
-							tamagotchi.getEnergy() >=
-							constants.minimumWakeupEnergy
-						) {
+						if (tamagotchi.getEnergy() >= constants.minimumWakeupEnergy) {
 							// Wake the pet up
 							tamagotchi.setSleeping(false);
 							log('Your tamagotchi was woken up');
 						} else {
-							log(
-								`Your tamagotchi doesn't have the energy to wake up yet (${constants.minimumWakeupEnergy} minimum)`
-							);
+							log(`Your tamagotchi doesn't have the energy to wake up yet (${constants.minimumWakeupEnergy} minimum)`);
 						}
 					} else {
 						log('Your tamagotchi is not sleeping');

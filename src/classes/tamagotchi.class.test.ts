@@ -1,15 +1,7 @@
 import Tamagotchi from './tamagotchi.class';
 
-const {
-	maxAge,
-	maxFood,
-	maxEnergy,
-	poopingThreshold,
-	maxPoop,
-	maxTimeSpentDiseased,
-	riskOfDisease,
-	chanceOfHealing,
-} = require('../constants');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { maxAge, maxFood, maxEnergy, poopingThreshold, maxPoop, maxTimeSpentDiseased } = require('../constants');
 
 describe('Tamagotchi', () => {
 	let tamagotchi;
