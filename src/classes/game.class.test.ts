@@ -7,7 +7,6 @@ const { tickRate } = require('../constants');
 
 describe('Game', () => {
 	let game: Game;
-	console.log = jest.fn();
 
 	beforeEach(() => {
 		game = new Game();
@@ -33,9 +32,14 @@ describe('Game', () => {
 	});
 
 	test('Game stops ticking once the pet dies', () => {
+		// Watch for the clearInterval command which stops the tick
 		const spy = jest.spyOn(window, 'clearInterval');
+
+		// Kill the pet
 		game.tamagotchi.die('test-death');
 		game.gameTick();
+
+		// Check that clearInterval was called
 		expect(spy).toHaveBeenCalled();
 	});
 
