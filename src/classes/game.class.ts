@@ -69,9 +69,8 @@ export default class Game {
 		const sleepingStatus = this.tamagotchi.isSleeping() ? 'sleeping' : 'awake';
 		const highlightedPoop = highlight(this.tamagotchi.getPoop(), constants.maxPoop, true);
 
+		// Ouput the pet's current stats
 		clear();
-		log(chalk.yellow(this.lastMessage));
-		log('---');
 		log(
 			`Tamagotchi status - ` +
 				`Age: ${highlightedAge}. ` +
@@ -84,7 +83,11 @@ export default class Game {
 
 		// Explain the available commands to the user
 		log('To interact with your Tamagotchi, simply press the key corresponding to your desired command.');
-		log('Available commands: (f)eed / (s)leep / (c)lean / e(x)it. Or enter anything else for a status update.');
+		log('Available commands: (c)lean / (f)eed / (h)eal / (s)leep / (w)ake / e(x)it.');
+		log('---');
+
+		// Ouput the last message
+		log(chalk.yellow(this.lastMessage));
 
 		// Check if the pet is diseased
 		if (this.tamagotchi.isDiseased()) {
