@@ -6,7 +6,8 @@ import Tamagotchi from './tamagotchi.class';
 const { tickRate } = require('../constants');
 
 describe('Game', () => {
-	let game;
+	let game: Game;
+	console.log = jest.fn();
 
 	beforeEach(() => {
 		game = new Game();

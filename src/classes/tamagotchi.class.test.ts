@@ -4,7 +4,7 @@ import Tamagotchi from './tamagotchi.class';
 const { maxAge, maxFood, maxEnergy, poopingThreshold, maxPoop, maxTimeSpentDiseased } = require('../constants');
 
 describe('Tamagotchi', () => {
-	let tamagotchi;
+	let tamagotchi: Tamagotchi;
 	const startingFood = maxFood - 1;
 
 	beforeEach(() => {
