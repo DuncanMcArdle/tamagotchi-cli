@@ -36,6 +36,17 @@ const recursiveReadLine = () => {
 		} else {
 			// Switch based on the command entered
 			switch (command) {
+				// Clean the Tamagotchi
+				case 'c':
+				case 'clean': {
+					// Attempt to clean the pet
+					log(
+						tamagotchi.clean()
+							? 'You cleaned 1 poop up'
+							: "There isn't any poop to clean up"
+					);
+					break;
+				}
 				// Feed the Tamagotchi
 				case 'f':
 				case 'feed': {

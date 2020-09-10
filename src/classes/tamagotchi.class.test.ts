@@ -1,6 +1,12 @@
 import Tamagotchi from './tamagotchi.class';
 
-const { maxAge, maxFood, maxEnergy } = require('../constants');
+const {
+	maxAge,
+	maxFood,
+	maxEnergy,
+	poopingThreshold,
+	maxPoop,
+} = require('../constants');
 
 describe('Tamagotchi', () => {
 	let tamagotchi;
@@ -103,12 +109,73 @@ describe('Tamagotchi', () => {
 			for (let i = 0; i < maxEnergy; i += 1) {
 				tamagotchi.increaseAge();
 
-				// Feed the pet to ensure it doesn't die
+				// Feed and clean the pet to ensure it doesn't die
 				tamagotchi.feed();
+				tamagotchi.clean();
 			}
 
 			// Check that the pet has fallen asleep
 			expect(tamagotchi.isSleeping()).toBe(true);
+		});
+	});
+
+	describe('Pooping', () => {
+		test("Pet's poop level is retrieved successfully", () => {
+			expect(tamagotchi.getPoop()).toBe(0);
+		});
+
+		test('Food since last poop increases with food', () => {
+			tamagotchi.feed();
+			expect(tamagotchi.getFoodSincePoop()).toBe(1);
+		});
+
+		test('Pet poops when exceeding the pooping threshold', () => {
+			// Initialise a new pet, with minimum food
+			tamagotchi = new Tamagotchi(new Date(), 1);
+
+			// Feed the pet enough to make it poop
+			for (let i = 0; i < poopingThreshold; i += 1) {
+				tamagotchi.feed();
+			}
+
+			// Expect the pet to have pooped
+			expect(tamagotchi.getPoop()).toBe(1);
+		});
+
+		test('Pet dies when not properly cleaned', () => {
+			// Initialise a new pet, with minimum food
+			tamagotchi = new Tamagotchi(new Date(), 1);
+
+			// Feed the pet enough to make it poop the maximum amount
+			for (let i = 0; i < maxPoop * poopingThreshold; i += 1) {
+				tamagotchi.feed();
+			}
+
+			// Check that the pet has died
+			expect(tamagotchi.isAlive()).toBe(false);
+		});
+
+		test('Cleaning a pet decreases the amount of poop around it', () => {
+			// Initialise a new pet, with minimum food
+			tamagotchi = new Tamagotchi(new Date(), 1);
+
+			// Feed the pet enough to make it poop
+			for (let i = 0; i < poopingThreshold; i += 1) {
+				tamagotchi.feed();
+			}
+
+			// Expect the pet to have pooped
+			expect(tamagotchi.getPoop()).toBe(1);
+
+			// Clean up the poop
+			tamagotchi.clean();
+
+			// Expect the pet to no longer have poop around it
+			expect(tamagotchi.getPoop()).toBe(0);
+		});
+
+		test("Pet's who have not pooped cannot be cleaned", () => {
+			expect(tamagotchi.clean()).toBe(false);
 		});
 	});
 });

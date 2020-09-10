@@ -4,8 +4,10 @@
 
 const maxAge = 100;
 const maxFood = 100;
-const maxEnergy = 10;
+const maxEnergy = 100;
 const minimumWakeupEnergy = 1;
+const poopingThreshold = 3;
+const maxPoop = 3;
 
 // Export the constant, freezing them from change
 export default module.exports = Object.freeze({
@@ -13,4 +15,6 @@ export default module.exports = Object.freeze({
 	maxFood,
 	maxEnergy,
 	minimumWakeupEnergy,
+	poopingThreshold,
+	maxPoop,
 });
