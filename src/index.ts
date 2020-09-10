@@ -31,7 +31,7 @@ const recursiveReadLine = () => {
 		// Check if the Tamagotchi has died
 		if (!tamagotchi.isAlive()) {
 			// Create a new Tamagotchi
-			tamagotchi = new Tamagotchi(new Date());
+			tamagotchi = new Tamagotchi();
 			log('A new Tamagotchi was born!');
 		} else {
 			// Switch based on the command entered
@@ -47,6 +47,7 @@ const recursiveReadLine = () => {
 					);
 					break;
 				}
+
 				// Feed the Tamagotchi
 				case 'f':
 				case 'feed': {
@@ -59,6 +60,25 @@ const recursiveReadLine = () => {
 							tamagotchi.feed()
 								? 'Your tamagotchi was fed'
 								: 'Your tamagotchi is full'
+						);
+					}
+					break;
+				}
+
+				// Heal the Tamagotchi
+				case 'h':
+				case 'heal': {
+					// Check if the pet has a disease
+					if (!tamagotchi.isDiseased()) {
+						log(
+							"Your pet doesn't have a disease that needs healing"
+						);
+					} else {
+						// Attempt to heal the pet
+						log(
+							tamagotchi.heal()
+								? 'Your tamagotchi was healed of disease'
+								: 'Your tamagotchi was not healed, try again'
 						);
 					}
 					break;
@@ -114,7 +134,7 @@ const recursiveReadLine = () => {
 };
 
 // Create a Tamagotchi
-tamagotchi = new Tamagotchi(new Date());
+tamagotchi = new Tamagotchi();
 clear();
 log('A new Tamagotchi was born!');
 
