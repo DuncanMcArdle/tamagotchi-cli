@@ -3,13 +3,14 @@
  */
 const maxAge = 100;
 const maxFood = 100;
-const maxEnergy = 100;
+const maxEnergy = 25;
 const minimumWakeupEnergy = 1;
 const poopingThreshold = 3;
 const maxPoop = 3;
 const maxTimeSpentDiseased = 5;
 const riskOfDisease = 1;
 const chanceOfHealing = 50;
+const tickRate = 1000;
 
 /**
  * @typedef {Object} constants
@@ -22,6 +23,7 @@ const chanceOfHealing = 50;
  * @property {number} riskOfDisease The odds of contracting a disease per age (out of 100)
  * @property {number} chanceOfHealing The odds of healing a disease per attempt (out of 100)
  * @property {number} maxTimeSpentDiseased The maximum amount of time a pet can be diseased before dying
+ * @property {number} tickRate The number of milliseconds per tick
  */
 export default module.exports = Object.freeze({
 	maxAge,
@@ -33,4 +35,5 @@ export default module.exports = Object.freeze({
 	riskOfDisease,
 	chanceOfHealing,
 	maxTimeSpentDiseased,
+	tickRate,
 });
