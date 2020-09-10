@@ -110,7 +110,7 @@ export default class Tamagotchi {
 	 *
 	 * @returns {string} The message to output to the user
 	 */
-	feed() {
+	feed(): string {
 		// Check if the pet is sleeping
 		if (this.isSleeping()) {
 			return "You can't feed a sleeping pet, wake it up first";
@@ -232,7 +232,7 @@ export default class Tamagotchi {
 	 *
 	 * @returns {string} The message to output to the user
 	 */
-	clean() {
+	clean(): string {
 		// Check if there is any poop to clear up
 		if (this.poop <= 0) {
 			return "There isn't any poop to clean up";
@@ -248,7 +248,7 @@ export default class Tamagotchi {
 	 *
 	 * @returns {string} The message to output to the user
 	 */
-	heal() {
+	heal(): string {
 		// Check if the pet has a disease
 		if (!this.isDiseased()) {
 			return "Your pet doesn't have a disease that needs healing";

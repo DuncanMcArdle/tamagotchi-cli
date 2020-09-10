@@ -4,7 +4,7 @@ import Tamagotchi from './tamagotchi.class';
 const { maxAge, maxFood, maxEnergy, poopingThreshold, maxPoop, maxTimeSpentDiseased } = require('../constants');
 
 describe('Tamagotchi', () => {
-	let tamagotchi;
+	let tamagotchi: Tamagotchi;
 	const startingFood = maxFood - 1;
 
 	beforeEach(() => {
@@ -122,10 +122,15 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet gains energy whilst asleep', () => {
+			// Reduce the pet's energy by ageing it
 			tamagotchi.increaseAge();
 			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+
+			// Put the pet to sleep and then age it, in order to recovery energy
 			tamagotchi.putToSleep();
 			tamagotchi.increaseAge();
+
+			// Check that the pet's energy has risen back up
 			expect(tamagotchi.getEnergy()).toBe(maxEnergy);
 		});
 
