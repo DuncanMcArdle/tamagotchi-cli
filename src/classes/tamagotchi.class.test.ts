@@ -11,6 +11,10 @@ describe('Tamagotchi', () => {
 		tamagotchi = new Tamagotchi(startingFood);
 	});
 
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	describe('Feeding', () => {
 		test("Pet's food level is retrieved successfully", () => {
 			expect(tamagotchi.getFood()).toBe(startingFood);
@@ -22,12 +26,12 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet can be fed when not full', () => {
-			expect(tamagotchi.feed()).toBe(true);
+			expect(tamagotchi.feed()).toMatch('Your tamagotchi was fed');
 		});
 
 		test('Pet cannot be fed when full', () => {
 			tamagotchi.feed();
-			expect(tamagotchi.feed()).toBe(false);
+			expect(tamagotchi.feed()).toMatch('Your tamagotchi is full');
 		});
 
 		test("Pet's food level goes down over time", () => {
@@ -39,11 +43,17 @@ describe('Tamagotchi', () => {
 			// Initialise a new pet, with minimum food
 			tamagotchi = new Tamagotchi(1);
 
-			// Age the pet
+			// Spy on the death function
+			const spy = jest.spyOn(tamagotchi, 'die');
+
+			// Age the pet (reduces the food)
 			tamagotchi.increaseAge();
 
 			// Check that the pet has run out of food
 			expect(tamagotchi.getFood()).toBe(0);
+
+			// Check that the die function was called appropriately
+			expect(spy).toHaveBeenCalledWith('lack of food');
 
 			// Check that the pet has died
 			expect(tamagotchi.isAlive()).toBe(false);
@@ -61,13 +71,24 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet dies upon exceeding the max age', () => {
+			// Spy on the death function
+			const spy = jest.spyOn(tamagotchi, 'die');
+
 			// Age the pet to the maximum age
 			for (let i = 0; i < maxAge; i += 1) {
 				tamagotchi.increaseAge();
+
+				// Feed, clean and heal the pet to ensure it doesn't die for other reasons
+				tamagotchi.feed();
+				tamagotchi.clean();
+				tamagotchi.heal();
 			}
 
 			// Check that the pet has reached maximum age
 			expect(tamagotchi.getAge()).toBe(maxAge);
+
+			// Check that the die function was called appropriately
+			expect(spy).toHaveBeenCalledWith('old age');
 
 			// Check that the pet has died
 			expect(tamagotchi.isAlive()).toBe(false);
@@ -76,14 +97,23 @@ describe('Tamagotchi', () => {
 
 	describe('Sleeping', () => {
 		test('Pet can be put to sleep', () => {
-			tamagotchi.setSleeping(true);
+			tamagotchi.putToSleep();
 			expect(tamagotchi.isSleeping()).toBe(true);
 		});
 
+		test('Pet cannot be put to sleep when already asleep', () => {
+			tamagotchi.putToSleep();
+			expect(tamagotchi.putToSleep()).toMatch('Your tamagotchi is already sleeping');
+		});
+
 		test('Pet can be woken up', () => {
-			tamagotchi.setSleeping(true);
-			tamagotchi.setSleeping(false);
+			tamagotchi.putToSleep();
+			tamagotchi.wakeUp();
 			expect(tamagotchi.isSleeping()).toBe(false);
+		});
+
+		test("Pet can't be woken up when not asleep", () => {
+			expect(tamagotchi.wakeUp()).toMatch('Your tamagotchi is not sleeping');
 		});
 
 		test('Pet loses energy whilst awake', () => {
@@ -94,12 +124,12 @@ describe('Tamagotchi', () => {
 		test('Pet gains energy whilst asleep', () => {
 			tamagotchi.increaseAge();
 			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
-			tamagotchi.setSleeping(true);
+			tamagotchi.putToSleep();
 			tamagotchi.increaseAge();
 			expect(tamagotchi.getEnergy()).toBe(maxEnergy);
 		});
 
-		test('Pet goes to sleep when out of energy', () => {
+		test('Pet automatically goes to sleep when out of energy', () => {
 			// Use up all of the pet's energy
 			for (let i = 0; i < maxEnergy; i += 1) {
 				tamagotchi.increaseAge();
@@ -112,6 +142,24 @@ describe('Tamagotchi', () => {
 
 			// Check that the pet has fallen asleep
 			expect(tamagotchi.isSleeping()).toBe(true);
+		});
+
+		test("Pet can't wake without any energy", () => {
+			// Use up all of the pet's energy
+			for (let i = 0; i < maxEnergy; i += 1) {
+				tamagotchi.increaseAge();
+
+				// Feed, clean and heal the pet to ensure it doesn't die
+				tamagotchi.feed();
+				tamagotchi.clean();
+				tamagotchi.heal();
+			}
+
+			// Check that the pet has fallen asleep
+			expect(tamagotchi.isSleeping()).toBe(true);
+
+			// Check that the pet is unable to wake up
+			expect(tamagotchi.wakeUp()).toMatch("Your pet doesn't have the energy to wake up yet");
 		});
 	});
 
@@ -171,7 +219,7 @@ describe('Tamagotchi', () => {
 		});
 
 		test("Pet's who have not pooped cannot be cleaned", () => {
-			expect(tamagotchi.clean()).toBe(false);
+			expect(tamagotchi.clean()).toMatch("There isn't any poop to clean up");
 		});
 	});
 

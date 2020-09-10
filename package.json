@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"start": "tsc && node dist/index.js",
-		"dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+		"dev": "--exec ts-node src/index.ts",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"test": "jest"
