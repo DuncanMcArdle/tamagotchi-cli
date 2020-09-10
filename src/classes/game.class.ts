@@ -70,7 +70,7 @@ export default class Game {
 		const highlightedPoop = highlight(this.tamagotchi.getPoop(), constants.maxPoop, true);
 
 		clear();
-		log(this.lastMessage);
+		log(chalk.yellow(this.lastMessage));
 		log('---');
 		log(
 			`Tamagotchi status - ` +
