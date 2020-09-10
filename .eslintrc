@@ -2,13 +2,7 @@
 	"env": {
 		"node": true
 	},
-	"extends": [
-		"airbnb",
-		"prettier",
-		"plugin:@typescript-eslint/recommended",
-		"prettier/@typescript-eslint",
-		"plugin:prettier/recommended"
-	],
+	"extends": ["airbnb", "prettier", "plugin:@typescript-eslint/recommended", "prettier/@typescript-eslint", "plugin:prettier/recommended"],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaVersion": 9,
@@ -23,11 +17,7 @@
 		"@typescript-eslint/explicit-function-return-type": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"import/extensions": "off",
-		"lines-between-class-members": [
-			"error",
-			"always",
-			{ "exceptAfterSingleLine": true }
-		]
+		"lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }]
 	},
 	"settings": {
 		"react": {

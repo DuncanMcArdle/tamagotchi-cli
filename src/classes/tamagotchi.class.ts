@@ -1,8 +1,8 @@
-import { clear } from 'console';
+import { clear, log } from 'console';
 import constants from '../constants';
 
 export default class Tamagotchi {
-	food?: number;
+	food: number;
 	age: number;
 	maxAge: number;
 	alive: boolean;
@@ -14,7 +14,10 @@ export default class Tamagotchi {
 	diseased: boolean;
 	timeSpentDiseased: number;
 
-	// Constructor
+	/**
+	 * Create a pet
+	 * @param {number} food The starting food of the pet (optional)
+	 */
 	constructor(food: number = constants.maxFood) {
 		this.food = food;
 		this.age = 0;
@@ -27,58 +30,73 @@ export default class Tamagotchi {
 		this.diseased = false;
 		this.timeSpentDiseased = 0;
 
+		// Start ageing the pet
 		this.ageingTimer = setInterval(() => {
 			this.increaseAge();
 		}, 1000);
 	}
 
-	// Age
+	/**
+	 * Retrieves the pets current age
+	 *
+	 * @returns {number} The pet's age
+	 */
+	getAge(): number {
+		return this.age;
+	}
+
+	/**
+	 * Increases the pets current age
+	 */
 	increaseAge() {
 		this.age += 1;
-		this.food -= 1;
 
-		// If the pet has run out of food
-		if (this.food <= 0) {
-			this.die('lack of food');
-		}
 		// If the pet has become too old
-		else if (this.age > this.maxAge) {
+		if (this.age > this.maxAge) {
 			this.die('old age');
-		}
-		// If the pet has spent too long with a disease
-		else if (
-			this.isDiseased() &&
-			this.timeSpentDiseased + 1 >= constants.maxTimeSpentDiseased
-		) {
-			this.die('disease');
 		} else {
-			// Check if the pet is asleep
-			if (this.isSleeping()) {
-				// If so, increase its energy level
-				this.energy += 1;
+			// Reduce the pet's food level
+			this.food -= 1;
+
+			// If the pet has run out of food
+			if (this.food <= 0) {
+				this.die('lack of food');
 			}
-			// Otherwise, decrease its energy level
+			// If the pet has spent too long with a disease
+			else if (this.isDiseased() && this.timeSpentDiseased + 1 >= constants.maxTimeSpentDiseased) {
+				this.die('disease');
+			}
+			// If the pet is still alive
 			else {
-				this.energy -= 1;
-
-				// Check if the pet needs to sleep
-				if (this.energy <= 0) {
-					this.setSleeping(true);
+				// Check if the pet is asleep
+				if (this.isSleeping()) {
+					this.energy += 1;
 				}
-			}
+				// Otherwise, decrease its energy level
+				else {
+					this.energy -= 1;
 
-			// Check if the pet is current diseased
-			if (this.isDiseased()) {
-				this.timeSpentDiseased += 1;
-			}
-			// Randomly decide whether or not to give the pet a disease
-			else if (Math.random() * 99 + 1 <= constants.riskOfDisease) {
-				this.diseased = true;
+					// Check if the pet needs to sleep
+					if (this.energy <= 0) {
+						this.setSleeping(true);
+					}
+				}
+
+				// Check if the pet is currently diseased
+				if (this.isDiseased()) {
+					this.timeSpentDiseased += 1;
+				}
+				// Randomly decide whether or not to give the pet a disease
+				else if (Math.random() * 99 + 1 <= constants.riskOfDisease) {
+					this.diseased = true;
+				}
 			}
 		}
 	}
 
-	// Die
+	/**
+	 * Kills the pet, outputting the cause of death to the console
+	 */
 	die(causeOfDeath: string) {
 		this.alive = false;
 
@@ -87,17 +105,21 @@ export default class Tamagotchi {
 
 		// Notify the user
 		clear();
-		console.log(
-			`Your Tamagotchi died due to ${causeOfDeath}. Press enter to start over.`
-		);
+		log(`Your Tamagotchi died due to ${causeOfDeath}. Press enter to start over.`);
 	}
 
-	// Get age
-	getAge() {
-		return this.age;
+	/**
+	 * Retrieves the pet's current food level
+	 *
+	 * @returns {number} The pet's current food level
+	 */
+	getFood(): number {
+		return this.food;
 	}
 
-	// Feed
+	/**
+	 * Attempts to feed the pet
+	 */
 	feed() {
 		if (this.food >= constants.maxFood) {
 			return false;
@@ -107,32 +129,43 @@ export default class Tamagotchi {
 		return true;
 	}
 
-	// Get food
-	getFood() {
-		return this.food;
-	}
-
-	// Is alive
-	isAlive() {
+	/**
+	 * Retrieves whether or not the pet is alive
+	 *
+	 * @returns {boolean} Whether or not the pet is currently alive
+	 */
+	isAlive(): boolean {
 		return this.alive;
 	}
 
-	// Is sleeping
-	isSleeping() {
+	/**
+	 * Retrieves whether or not the pet is sleeping
+	 *
+	 * @returns {boolean} Whether or not the pet is currently sleeping
+	 */
+	isSleeping(): boolean {
 		return this.sleeping;
 	}
 
-	// Get energy
-	getEnergy() {
+	/**
+	 * Retrieves the pet's current energy level
+	 *
+	 * @returns {number} The pet's current energy level
+	 */
+	getEnergy(): number {
 		return this.energy;
 	}
 
-	// Put to sleep
+	/**
+	 * Puts the pet to sleep
+	 */
 	setSleeping(newState: boolean) {
 		this.sleeping = newState;
 	}
 
-	// Poop
+	/**
+	 * Attempts to make the pet poop
+	 */
 	doPoop() {
 		this.poop += 1;
 		this.foodSincePoop = 0;
@@ -143,17 +176,27 @@ export default class Tamagotchi {
 		}
 	}
 
-	// Get poop amount
-	getPoop() {
+	/**
+	 * Retrieves the pet's current amount of poop
+	 *
+	 * @returns {number} The pet's current amount of poop
+	 */
+	getPoop(): number {
 		return this.poop;
 	}
 
-	// Get food consumed since last poop
-	getFoodSincePoop() {
+	/**
+	 * Retrieves the amount of food the pet has digested since its last poop
+	 *
+	 * @returns {number} The amount of food the pet has digested since its last poop
+	 */
+	getFoodSincePoop(): number {
 		return this.foodSincePoop;
 	}
 
-	// Increase the amount of poop in the pet
+	/**
+	 * Increases the amount of food the pet has digested since its last poop
+	 */
 	increaseFoodSincePoop() {
 		this.foodSincePoop += 1;
 		if (this.foodSincePoop >= constants.poopingThreshold) {
@@ -161,7 +204,9 @@ export default class Tamagotchi {
 		}
 	}
 
-	// Clean the pet
+	/**
+	 * Attempts to clean the poop around the pet
+	 */
 	clean() {
 		if (this.poop <= 0) {
 			return false;
@@ -170,7 +215,9 @@ export default class Tamagotchi {
 		return true;
 	}
 
-	// Heal the pet
+	/**
+	 * Attempts to heal the pet
+	 */
 	heal() {
 		if (!this.isDiseased()) {
 			return false;
@@ -185,14 +232,20 @@ export default class Tamagotchi {
 		return false;
 	}
 
-	// Check if the pet is diseased
-	isDiseased() {
+	/**
+	 * Retrieves whether or not the pet is diseased
+	 *
+	 * @returns {boolean} Whether or not the pet is currently diseased
+	 */
+	isDiseased(): boolean {
 		return this.diseased;
 	}
 
-	// Output status
+	/**
+	 * Outputs a series of stats around the pet into the console
+	 */
 	outputStatus() {
-		console.log(
+		log(
 			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}. Energy: ${this.getEnergy()} (${
 				this.isSleeping() ? 'sleeping' : 'awake'
 			}). Poop: ${this.getPoop()}. Food since last poop: ${this.getFoodSincePoop()}`
@@ -200,7 +253,7 @@ export default class Tamagotchi {
 
 		// Check if the pet is diseased
 		if (this.isDiseased()) {
-			console.log(
+			log(
 				`WARNING: Your pet has a disease! It will die in ${
 					constants.maxTimeSpentDiseased - this.timeSpentDiseased
 				} seconds if you do not (h)eal it`
