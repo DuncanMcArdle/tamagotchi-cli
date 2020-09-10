@@ -1,5 +1,8 @@
 import { clear, log } from 'console';
+import highlight from '../utils/highlight';
 import constants from '../constants';
+
+const chalk = require('chalk');
 
 export default class Tamagotchi {
 	food: number;
@@ -245,18 +248,24 @@ export default class Tamagotchi {
 	 * Outputs a series of stats around the pet into the console
 	 */
 	outputStatus() {
+		// Format individual stats
+		const highlightedAge = highlight(this.getAge(), constants.maxAge, true);
+		const highlightedFood = highlight(this.getFood(), constants.maxFood, false);
+		const highlightedEnergy = highlight(this.getEnergy(), constants.maxEnergy, false);
+		const sleepingStatus = this.isSleeping() ? 'sleeping' : 'awake';
+		const highlightedPoop = highlight(this.getPoop(), constants.maxPoop, true);
 		log(
-			`Tamagotchi status -  Age: ${this.getAge()}. Food: ${this.getFood()}. Alive: ${this.isAlive()}. Energy: ${this.getEnergy()} (${
-				this.isSleeping() ? 'sleeping' : 'awake'
-			}). Poop: ${this.getPoop()}. Food since last poop: ${this.getFoodSincePoop()}`
+			`Tamagotchi status - Age: ${highlightedAge}. Food: ${highlightedFood}. Energy: ${highlightedEnergy} (${sleepingStatus}). Poop: ${highlightedPoop}. Food since last poop: ${this.getFoodSincePoop()}`
 		);
 
 		// Check if the pet is diseased
 		if (this.isDiseased()) {
 			log(
-				`WARNING: Your pet has a disease! It will die in ${
-					constants.maxTimeSpentDiseased - this.timeSpentDiseased
-				} seconds if you do not (h)eal it`
+				chalk.red(
+					`WARNING: Your pet has a disease! It will die in ${
+						constants.maxTimeSpentDiseased - this.timeSpentDiseased
+					} seconds if you do not (h)eal it`
+				)
 			);
 		}
 	}

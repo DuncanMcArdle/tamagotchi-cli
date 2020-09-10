@@ -19,7 +19,7 @@ const recursiveReadLine = () => {
 	tamagotchi.outputStatus();
 
 	// Explain the available commands to the user
-	log('Available commands: (f)eed / (p)at / (s)leep / (c)lean. Or enter anything else for a status update.');
+	log('Available commands: (f)eed / (s)leep / (c)lean. Or enter anything else for a status update.');
 
 	// Ask the user for a command
 	readLineInterface.question('Command: ', (command) => {
