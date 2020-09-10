@@ -195,7 +195,7 @@ export default class Tamagotchi {
 
 		// Check if the pet has exceeded the maximum amount of poop
 		if (this.poop >= constants.maxPoop) {
-			this.die('poor hygeine');
+			this.die('poor hygiene');
 		}
 	}
 

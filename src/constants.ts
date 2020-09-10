@@ -2,13 +2,13 @@
  * This file contains game-wide constants. Changing them will affect both the game and its tests.
  */
 const maxAge = 100;
-const maxFood = 100;
-const maxEnergy = 25;
+const maxFood = 50;
+const maxEnergy = 50;
 const minimumWakeupEnergy = 1;
 const poopingThreshold = 3;
 const maxPoop = 3;
-const maxTimeSpentDiseased = 5;
-const riskOfDisease = 1;
+const maxTimeSpentDiseased = 20;
+const riskOfDisease = 5;
 const chanceOfHealing = 50;
 const tickRate = 1000;
 

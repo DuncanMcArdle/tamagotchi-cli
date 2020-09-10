@@ -2,6 +2,9 @@ import chalk from 'chalk';
 import Game from './game.class';
 import Tamagotchi from './tamagotchi.class';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { tickRate } = require('../constants');
+
 describe('Game', () => {
 	let game;
 
@@ -13,14 +16,15 @@ describe('Game', () => {
 		expect(game.tamagotchi).toBeInstanceOf(Tamagotchi);
 	});
 
-	test.skip('Game ticks', () => {
+	test('Game ticks', async () => {
+		// Watch the tick function
 		const spy = jest.spyOn(game, 'gameTick');
-		jest.useFakeTimers();
-		jest.advanceTimersByTime(5000);
 
+		// Wait for 1 tick
+		await new Promise((r) => setTimeout(r, tickRate));
+
+		// Check that the tick function was called
 		expect(spy).toHaveBeenCalled();
-
-		// 		TODO
 	});
 
 	test('Game stops ticking once the pet dies', () => {
@@ -49,6 +53,13 @@ describe('Game', () => {
 	test('Game is stopped upon pressing x', () => {
 		const spy = jest.spyOn(process, 'exit').mockImplementation();
 		const key = { name: 'x' };
+		game.processKeyPress(key);
+		expect(spy).toHaveBeenCalled();
+	});
+
+	test('Game is stopped upon pressing Ctrl + c', () => {
+		const spy = jest.spyOn(process, 'exit').mockImplementation();
+		const key = { ctrl: true, name: 'c' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
 	});

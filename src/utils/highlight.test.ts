@@ -2,10 +2,6 @@ import chalk from 'chalk';
 import highlight from './highlight';
 
 describe('Highlighter', () => {
-	test('Text is formatted correctly', () => {
-		expect(highlight(1, 2, false)).toMatch('1/2');
-	});
-
 	test('Green highlighting', () => {
 		// Assign a dummy function to chalk.green
 		Object.defineProperty(chalk, 'green', { value: jest.fn() });
@@ -17,7 +13,7 @@ describe('Highlighter', () => {
 		expect(chalk.green).toHaveBeenCalled();
 	});
 
-	test.skip('Yellow highlighting', () => {
+	test('Yellow highlighting', () => {
 		// Assign a dummy function to chalk.yellow
 		Object.defineProperty(chalk, 'yellow', { value: jest.fn() });
 
