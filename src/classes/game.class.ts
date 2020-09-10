@@ -9,13 +9,17 @@ export default class Game {
 	tamagotchi: Tamagotchi;
 	timer: ReturnType<typeof setInterval>;
 	lastMessage: string;
+	firstRun: boolean;
 
 	/**
 	 * Create a Game
 	 */
 	constructor() {
 		this.tamagotchi = null;
-		this.lastMessage = '';
+		this.firstRun = true;
+
+		// Show an intro message
+		this.lastMessage = "Welcome to the Tamagotchi CLI! When you're ready, press (n)ew to get started";
 
 		// Create a tamagotchi
 		this.createTamagotchi();
@@ -34,7 +38,7 @@ export default class Game {
 			clearInterval(this.timer);
 
 			// Set the latest output
-			this.lastMessage = `Your pet died due to ${this.tamagotchi.causeOfDeath}. Press any key to start over.`;
+			this.lastMessage = `Your pet died due to ${this.tamagotchi.causeOfDeath}. Press (n)ew to start over.`;
 		}
 
 		// Update the console
@@ -45,14 +49,19 @@ export default class Game {
 	 * Create a Tamagotchi
 	 */
 	createTamagotchi() {
+		// Check if the app hasn't just launched
+		if (!this.firstRun) {
+			// Start the ageing process
+			this.timer = setInterval(() => {
+				this.gameTick();
+			}, constants.tickRate);
+
+			// Notify the user
+			this.lastMessage = 'A new Tamagotchi was born, keep it alive!';
+		}
+
 		// Create a Tamagotchi
 		this.tamagotchi = new Tamagotchi();
-		this.lastMessage = 'A new Tamagotchi was born!';
-
-		// Start the ageing process
-		this.timer = setInterval(() => {
-			this.gameTick();
-		}, constants.tickRate);
 
 		// Show the status of the pet
 		this.updateConsole();
@@ -69,9 +78,8 @@ export default class Game {
 		const sleepingStatus = this.tamagotchi.isSleeping() ? 'sleeping' : 'awake';
 		const highlightedPoop = highlight(this.tamagotchi.getPoop(), constants.maxPoop, true);
 
+		// Ouput the pet's current stats
 		clear();
-		log(chalk.yellow(this.lastMessage));
-		log('---');
 		log(
 			`Tamagotchi status - ` +
 				`Age: ${highlightedAge}. ` +
@@ -84,7 +92,11 @@ export default class Game {
 
 		// Explain the available commands to the user
 		log('To interact with your Tamagotchi, simply press the key corresponding to your desired command.');
-		log('Available commands: (f)eed / (s)leep / (c)lean / e(x)it. Or enter anything else for a status update.');
+		log('Available commands: (c)lean / (f)eed / (h)eal / (s)leep / (w)ake / e(x)it.');
+		log('---');
+
+		// Output the last message
+		log(chalk.yellow(this.lastMessage));
 
 		// Check if the pet is diseased
 		if (this.tamagotchi.isDiseased()) {
@@ -111,9 +123,15 @@ export default class Game {
 			clear();
 
 			// Check if the pet has died
-			if (!this.tamagotchi.isAlive()) {
-				// Create a new Tamagotchi
-				this.createTamagotchi();
+			if (this.firstRun || !this.tamagotchi.isAlive()) {
+				// If the user enters (n)ew
+				if (key.name === 'n') {
+					// Mark the user as no longer being on their first run
+					this.firstRun = false;
+
+					// Create a new Tamagotchi
+					this.createTamagotchi();
+				}
 			}
 			// Pet is alive
 			else {

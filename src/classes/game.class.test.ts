@@ -20,6 +20,10 @@ describe('Game', () => {
 		// Watch the tick function
 		const spy = jest.spyOn(game, 'gameTick');
 
+		// Start a game
+		const key = { name: 'n' };
+		game.processKeyPress(key);
+
 		// Wait for 1 tick
 		await new Promise((r) => setTimeout(r, tickRate));
 
@@ -39,19 +43,31 @@ describe('Game', () => {
 		expect(game.tamagotchi.getAge()).toBe(1);
 	});
 
-	test('A new Tamagotchi is created when pressing a key post-death', () => {
+	test('A new Tamagotchi is created when pressing (n)ew post-death', () => {
 		// Kill the current Tamagotchi
 		game.tamagotchi.die('test-death');
 
 		// Spy on the creation of a new Tamagotchi
 		const spy = jest.spyOn(game, 'createTamagotchi');
-		const key = { name: 'q' };
+		const key = { name: 'n' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
 	});
 
+	test('All buttons other than (n)ew are disabled during pre-game', () => {
+		// Input the target key
+		const key = { name: 'q' };
+		game.processKeyPress(key);
+		expect(game.lastMessage).not.toMatch('Command not recognised, try again.');
+	});
+
 	test('Game is stopped upon pressing x', () => {
 		const spy = jest.spyOn(process, 'exit').mockImplementation();
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'x' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -59,6 +75,11 @@ describe('Game', () => {
 
 	test('Game is stopped upon pressing Ctrl + c', () => {
 		const spy = jest.spyOn(process, 'exit').mockImplementation();
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { ctrl: true, name: 'c' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -66,6 +87,11 @@ describe('Game', () => {
 
 	test('Clean function is called upon pressing c', () => {
 		const spy = jest.spyOn(game.tamagotchi, 'clean');
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'c' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -73,6 +99,11 @@ describe('Game', () => {
 
 	test('Feed function is called upon pressing f', () => {
 		const spy = jest.spyOn(game.tamagotchi, 'feed');
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'f' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -80,6 +111,11 @@ describe('Game', () => {
 
 	test('Heal function is called upon pressing h', () => {
 		const spy = jest.spyOn(game.tamagotchi, 'heal');
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'h' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -87,6 +123,11 @@ describe('Game', () => {
 
 	test('Sleep function is called upon pressing s', () => {
 		const spy = jest.spyOn(game.tamagotchi, 'putToSleep');
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 's' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
@@ -94,12 +135,21 @@ describe('Game', () => {
 
 	test('Wake function is called upon pressing w', () => {
 		const spy = jest.spyOn(game.tamagotchi, 'wakeUp');
+
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'w' };
 		game.processKeyPress(key);
 		expect(spy).toHaveBeenCalled();
 	});
 
 	test('Non-recognised command notifies the user', () => {
+		// Start a game
+		game.firstRun = false;
+
+		// Input the target key
 		const key = { name: 'q' };
 		game.processKeyPress(key);
 		expect(game.lastMessage).toMatch('Command not recognised, try again.');
