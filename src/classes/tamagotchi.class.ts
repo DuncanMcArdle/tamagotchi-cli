@@ -62,8 +62,8 @@ export default class Tamagotchi {
 			}
 			// If the pet is still alive
 			else {
-				// Check if the pet is asleep
-				if (this.isSleeping()) {
+				// Check if the pet is asleep and not at the maximum energy level
+				if (this.isSleeping() && this.energy < constants.maxEnergy) {
 					this.energy += 1;
 				}
 				// Otherwise, decrease its energy level
