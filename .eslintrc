@@ -9,6 +9,7 @@
 		"project": "./tsconfig.json"
 	},
 	"plugins": ["@typescript-eslint", "prettier"],
+	"ignorePatterns": ["/*.*"],
 	"rules": {
 		"prettier/prettier": ["error"],
 		"no-param-reassign": ["error", { "props": false }],

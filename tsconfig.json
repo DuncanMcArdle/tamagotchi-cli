@@ -10,7 +10,7 @@
 		"esModuleInterop": true,
 		"allowJs": false
 	},
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", ".jest.config.js"],
 	"exclude": ["node_modules"],
 	"forceConsitentCasingInFileNames": true,
 	"noImplicitReturns": true,
