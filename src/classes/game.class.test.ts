@@ -9,7 +9,16 @@ describe('Game', () => {
 	let game: Game;
 
 	beforeEach(() => {
+		// Mock the console logs and clears so they don't output during testing
+		jest.spyOn(console, 'log').mockImplementation(jest.fn());
+		jest.spyOn(console, 'clear').mockImplementation(jest.fn());
+
+		// Initialise a game instance
 		game = new Game();
+	});
+
+	afterEach(() => {
+		jest.restoreAllMocks();
 	});
 
 	test('Creating a game also created a Tamagotchi', () => {
