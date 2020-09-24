@@ -1,4 +1,3 @@
-import { log, clear } from 'console';
 import { Key } from 'readline';
 import chalk from 'chalk';
 import Tamagotchi from './tamagotchi.class';
@@ -79,8 +78,8 @@ export default class Game {
 		const highlightedPoop = highlight(this.tamagotchi.getPoop(), constants.maxPoop, true);
 
 		// Ouput the pet's current stats
-		clear();
-		log(
+		console.clear();
+		console.log(
 			`Tamagotchi status - ` +
 				`Age: ${highlightedAge}. ` +
 				`Food: ${highlightedFood}. ` +
@@ -88,19 +87,19 @@ export default class Game {
 				`Poop: ${highlightedPoop}. ` +
 				`Food since last poop: ${this.tamagotchi.getFoodSincePoop()}`
 		);
-		log('---');
+		console.log('---');
 
 		// Explain the available commands to the user
-		log('To interact with your Tamagotchi, simply press the key corresponding to your desired command.');
-		log('Available commands: (c)lean / (f)eed / (h)eal / (s)leep / (w)ake / e(x)it.');
-		log('---');
+		console.log('To interact with your Tamagotchi, simply press the key corresponding to your desired command.');
+		console.log('Available commands: (c)lean / (f)eed / (h)eal / (s)leep / (w)ake / e(x)it.');
+		console.log('---');
 
 		// Output the last message
-		log(chalk.yellow(this.lastMessage));
+		console.log(chalk.yellow(this.lastMessage));
 
 		// Check if the pet is diseased
 		if (this.tamagotchi.isDiseased()) {
-			log(
+			console.log(
 				chalk.red(
 					`WARNING: Your pet has a disease! It will die in ${
 						constants.maxTimeSpentDiseased - this.tamagotchi.timeSpentDiseased
@@ -120,7 +119,7 @@ export default class Game {
 			process.exit();
 		} else {
 			// Clear the previous output
-			clear();
+			console.clear();
 
 			// Check if the pet has died
 			if (this.firstRun || !this.tamagotchi.isAlive()) {
