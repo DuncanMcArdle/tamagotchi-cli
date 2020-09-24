@@ -8,6 +8,7 @@
 		"dev": "--exec ts-node src/index.ts",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
+		"pretest": "eslint --ignore-path .gitignore .",
 		"test": "jest"
 	},
 	"repository": {
