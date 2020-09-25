@@ -31,6 +31,12 @@ export default class Game {
 		// Age the pet
 		this.tamagotchi.increaseAge();
 
+		// Reduce the pet's food level
+		this.tamagotchi.reduceFood();
+
+		// Increase / Decrease the pet's energy (depending on whether or not it's sleeping)
+		this.tamagotchi.increaseDecreaseEnergy();
+
 		// Check if it has died
 		if (!this.tamagotchi.isAlive()) {
 			// If not, cancel the ageing timer
