@@ -263,5 +263,33 @@ describe('Tamagotchi', () => {
 			// Check that the pet has died
 			expect(tamagotchi.isAlive()).toBe(false);
 		});
+
+		test('Healing can succeed', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Manually set the chance of healing to 100%
+			constants.chanceOfHealing = 100;
+
+			// Attempt to heal the pet
+			tamagotchi.heal();
+
+			// Expect the pet to have been healed
+			expect(tamagotchi.isDiseased()).toBe(false);
+		});
+
+		test('Healing can fail', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Manually set the chance of healing to 0%
+			constants.chanceOfHealing = 0;
+
+			// Attempt to heal the pet
+			tamagotchi.heal();
+
+			// Expect the pet to have not been healed
+			expect(tamagotchi.isDiseased()).toBe(true);
+		});
 	});
 });
