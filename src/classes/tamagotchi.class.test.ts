@@ -235,6 +235,17 @@ describe('Tamagotchi', () => {
 			expect(tamagotchi.isDiseased()).toBe(false);
 		});
 
+		test("Pet's time with disease increments", () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Age the pet
+			tamagotchi.increaseAge();
+
+			// Expect the pet's time with disease counter to have incremented
+			expect(tamagotchi.timeSpentDiseased).toBe(1);
+		});
+
 		test('Pet dies when not healed from disease quickly enough', () => {
 			// Manually disease the pet
 			tamagotchi.diseased = true;
