@@ -1,18 +1,6 @@
 /**
  * This file contains game-wide constants. Changing them will affect both the game and its tests.
- */
-const maxAge = 100;
-const maxFood = 50;
-const maxEnergy = 50;
-const minimumWakeupEnergy = 1;
-const poopingThreshold = 3;
-const maxPoop = 3;
-const maxTimeSpentDiseased = 20;
-const riskOfDisease = 5;
-const chanceOfHealing = 50;
-const tickRate = 1000;
-
-/**
+ *
  * @typedef {Object} constants
  * @property {number} maxAge The maximum age a pet can live to before dying
  * @property {number} maxFood The maximum age a pet can live to before dying
@@ -25,15 +13,17 @@ const tickRate = 1000;
  * @property {number} maxTimeSpentDiseased The maximum amount of time a pet can be diseased before dying
  * @property {number} tickRate The number of milliseconds per tick
  */
-export default module.exports = Object.freeze({
-	maxAge,
-	maxFood,
-	maxEnergy,
-	minimumWakeupEnergy,
-	poopingThreshold,
-	maxPoop,
-	riskOfDisease,
-	chanceOfHealing,
-	maxTimeSpentDiseased,
-	tickRate,
-});
+const constants = {
+	maxAge: 100,
+	maxFood: 50,
+	maxEnergy: 50,
+	minimumWakeupEnergy: 1,
+	poopingThreshold: 3,
+	maxPoop: 3,
+	maxTimeSpentDiseased: 20,
+	riskOfDisease: 5,
+	chanceOfHealing: 50,
+	tickRate: 1000,
+};
+
+export default constants;
