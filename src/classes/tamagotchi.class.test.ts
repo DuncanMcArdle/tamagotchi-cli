@@ -247,20 +247,23 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet dies when not healed from disease quickly enough', () => {
+			// Spy on the death function
+			const spy = jest.spyOn(tamagotchi, 'die');
+
 			// Manually disease the pet
 			tamagotchi.diseased = true;
 
-			// Age the pet to the point of death by disease
-			for (let i = 0; i < maxTimeSpentDiseased; i += 1) {
+			// Set the pet as about to die from disease
+			tamagotchi.timeSpentDiseased = maxTimeSpentDiseased - 1;
+
+			// Age the pet
 			tamagotchi.increaseAge();
 
-				// Feed and clean the pet to ensure it doesn't die for other reasons
-				tamagotchi.feed();
-				tamagotchi.clean();
-			}
+			// Check that the die function was called appropriately
+			expect(spy).toHaveBeenCalledWith('disease');
 
-			// Expect the pet to have died
-			expect(tamagotchi.isDiseased()).toBe(true);
+			// Check that the pet has died
+			expect(tamagotchi.isAlive()).toBe(false);
 		});
 	});
 });
