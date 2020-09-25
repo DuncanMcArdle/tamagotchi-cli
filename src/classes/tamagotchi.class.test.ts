@@ -150,33 +150,20 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet automatically goes to sleep when out of energy', () => {
-			// Use up all of the pet's energy
-			for (let i = 0; i < maxEnergy; i += 1) {
-				tamagotchi.increaseAge();
+			// Use up almost all of the pet's energy
+			tamagotchi.energy = 1;
 
-				// Feed, clean and heal the pet to ensure it doesn't die
-				tamagotchi.feed();
-				tamagotchi.clean();
-				tamagotchi.heal();
-			}
+			// Age the pet (uses up the last bit of energy)
+			tamagotchi.increaseAge();
 
 			// Check that the pet has fallen asleep
 			expect(tamagotchi.isSleeping()).toBe(true);
 		});
 
 		test("Pet can't wake without any energy", () => {
-			// Use up all of the pet's energy
-			for (let i = 0; i < maxEnergy; i += 1) {
-				tamagotchi.increaseAge();
-
-				// Feed, clean and heal the pet to ensure it doesn't die
-				tamagotchi.feed();
-				tamagotchi.clean();
-				tamagotchi.heal();
-			}
-
-			// Check that the pet has fallen asleep
-			expect(tamagotchi.isSleeping()).toBe(true);
+			// Use up all of the pet's energy and put it to sleep
+			tamagotchi.energy = 0;
+			tamagotchi.sleeping = true;
 
 			// Check that the pet is unable to wake up
 			expect(tamagotchi.wakeUp()).toMatch("Your pet doesn't have the energy to wake up yet");
@@ -254,7 +241,7 @@ describe('Tamagotchi', () => {
 
 			// Age the pet to the point of death by disease
 			for (let i = 0; i < maxTimeSpentDiseased; i += 1) {
-				tamagotchi.increaseAge();
+			tamagotchi.increaseAge();
 
 				// Feed and clean the pet to ensure it doesn't die for other reasons
 				tamagotchi.feed();
