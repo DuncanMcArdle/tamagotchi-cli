@@ -57,6 +57,16 @@ describe('Game', () => {
 		expect(game.tamagotchi.getAge()).toBe(1);
 	});
 
+	test('Game ticks cause the Tamagotchi to use energy', () => {
+		game.gameTick();
+		expect(game.tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
+	});
+
+	test('Game ticks cause the Tamagotchi to lose food', () => {
+		game.gameTick();
+		expect(game.tamagotchi.getFood()).toBe(constants.maxFood - 1);
+	});
+
 	test('A new Tamagotchi is created when pressing (n)ew post-death', () => {
 		// Kill the current Tamagotchi
 		game.tamagotchi.die('test-death');

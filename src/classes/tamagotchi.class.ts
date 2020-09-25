@@ -44,47 +44,24 @@ export default class Tamagotchi {
 	 * Increases the pets current age
 	 */
 	increaseAge() {
+		// Increase the pet's age
 		this.age += 1;
 
-		// If the pet has become too old
+		// Check if the pet has become too old
 		if (this.age >= this.maxAge) {
 			this.die('old age');
-		} else {
-			// Reduce the pet's food level
-			this.food -= 1;
-			// If the pet has run out of food
-			if (this.food <= 0) {
-				this.die('lack of food');
-			}
-			// If the pet has spent too long with a disease
-			else if (this.isDiseased() && this.timeSpentDiseased + 1 >= constants.maxTimeSpentDiseased) {
-				this.die('disease');
-			}
-			// If the pet is still alive
-			else {
-				// Check if the pet is asleep and not at the maximum energy level
-				if (this.isSleeping() && this.energy < constants.maxEnergy) {
-					this.energy += 1;
-				}
-				// Otherwise, decrease its energy level
-				else {
-					this.energy -= 1;
-
-					// Check if the pet needs to sleep
-					if (this.energy <= 0) {
-						this.sleeping = true;
-					}
-				}
-
-				// Check if the pet is currently diseased
-				if (this.isDiseased()) {
-					this.timeSpentDiseased += 1;
-				}
-				// Randomly decide whether or not to give the pet a disease
-				else if (Math.random() * 99 + 1 <= constants.riskOfDisease) {
-					this.diseased = true;
-				}
-			}
+		}
+		// If the pet has spent too long with a disease
+		else if (this.isDiseased() && this.timeSpentDiseased + 1 >= constants.maxTimeSpentDiseased) {
+			this.die('disease');
+		}
+		// Check if the pet is currently diseased
+		else if (this.isDiseased()) {
+			this.timeSpentDiseased += 1;
+		}
+		// Randomly decide whether or not to give the pet a disease
+		else if (Math.random() * 99 + 1 <= constants.riskOfDisease) {
+			this.diseased = true;
 		}
 	}
 
@@ -123,6 +100,19 @@ export default class Tamagotchi {
 		this.increaseFoodSincePoop();
 		this.food += 1;
 		return 'Your tamagotchi was fed';
+	}
+
+	/**
+	 * Reduces the pet's current food level
+	 */
+	reduceFood() {
+		// Reduce the pet's food
+		this.food -= 1;
+
+		// Check if the pet has run out of food
+		if (this.food <= 0) {
+			this.die('lack of food');
+		}
 	}
 
 	/**
@@ -165,6 +155,26 @@ export default class Tamagotchi {
 			return 'Your tamagotchi was put to sleep';
 		}
 		return 'Your tamagotchi is already sleeping';
+	}
+
+	/**
+	 * Increase / Decrease energy
+	 */
+	increaseDecreaseEnergy() {
+		// Check if the pet is sleeping and isn't at max energy
+		if (this.isSleeping() && this.energy < constants.maxEnergy) {
+			// Increase the pet's energy
+			this.energy += 1;
+		} else if (!this.isSleeping()) {
+			// Decrease the pet's energy
+			this.energy -= 1;
+
+			// Check if the pet has run out of energy
+			if (this.energy <= 0) {
+				// Put the pet to sleep
+				this.putToSleep();
+			}
+		}
 	}
 
 	/**

@@ -32,8 +32,13 @@ describe('Tamagotchi', () => {
 			expect(tamagotchi.feed()).toMatch('Your tamagotchi is full');
 		});
 
-		test("Pet's food level goes down over time", () => {
-			tamagotchi.increaseAge();
+		test('Pet cannot be fed when asleep', () => {
+			tamagotchi.putToSleep();
+			expect(tamagotchi.feed()).toMatch("You can't feed a sleeping pet, wake it up first");
+		});
+
+		test("Pet's food goes down when reduced", () => {
+			tamagotchi.reduceFood();
 			expect(tamagotchi.getFood()).toBe(startingFood - 1);
 		});
 
@@ -44,8 +49,8 @@ describe('Tamagotchi', () => {
 			// Spy on the death function
 			const spy = jest.spyOn(tamagotchi, 'die');
 
-			// Age the pet (reduces the food)
-			tamagotchi.increaseAge();
+			// Rreduce the pet's food
+			tamagotchi.reduceFood();
 
 			// Check that the pet has run out of food
 			expect(tamagotchi.getFood()).toBe(0);
@@ -76,9 +81,7 @@ describe('Tamagotchi', () => {
 			for (let i = 0; i < constants.maxAge; i += 1) {
 				tamagotchi.increaseAge();
 
-				// Feed, clean and heal the pet to ensure it doesn't die for other reasons
-				tamagotchi.feed();
-				tamagotchi.clean();
+				// Heal the pet to ensure it doesn't die
 				tamagotchi.heal();
 			}
 
@@ -115,18 +118,18 @@ describe('Tamagotchi', () => {
 		});
 
 		test('Pet loses energy whilst awake', () => {
-			tamagotchi.increaseAge();
+			tamagotchi.increaseDecreaseEnergy();
 			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 		});
 
 		test('Pet gains energy whilst asleep', () => {
-			// Reduce the pet's energy by ageing it
-			tamagotchi.increaseAge();
+			// Reduce the pet's energy
+			tamagotchi.increaseDecreaseEnergy();
 			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 
-			// Put the pet to sleep and then age it, in order to recover energy
+			// Put the pet to sleep
 			tamagotchi.putToSleep();
-			tamagotchi.increaseAge();
+			tamagotchi.increaseDecreaseEnergy();
 
 			// Check that the pet's energy has risen back up
 			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy);
@@ -134,14 +137,14 @@ describe('Tamagotchi', () => {
 
 		test('Pet does not go above max energy whilst asleep', () => {
 			// Reduce the pet's energy by ageing it
-			tamagotchi.increaseAge();
+			tamagotchi.increaseDecreaseEnergy();
 			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 
-			// Put the pet to sleep and then age it, in order to recover energy
+			// Put the pet to recovery energy
 			tamagotchi.putToSleep();
-			tamagotchi.increaseAge();
-			tamagotchi.increaseAge();
-			tamagotchi.increaseAge();
+			tamagotchi.increaseDecreaseEnergy();
+			tamagotchi.increaseDecreaseEnergy();
+			tamagotchi.increaseDecreaseEnergy();
 
 			// Check that the pet's energy has risen back up
 			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy);
@@ -152,7 +155,7 @@ describe('Tamagotchi', () => {
 			tamagotchi.energy = 1;
 
 			// Age the pet (uses up the last bit of energy)
-			tamagotchi.increaseAge();
+			tamagotchi.increaseDecreaseEnergy();
 
 			// Check that the pet has fallen asleep
 			expect(tamagotchi.isSleeping()).toBe(true);
