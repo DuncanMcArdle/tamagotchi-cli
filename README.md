@@ -17,6 +17,12 @@ If all goes well, it should look like this:
 
 [![A sample screenshot of the Tamagoshi CLI](https://i.imgur.com/evAZjvS.png 'A sample screenshot of the Tamagoshi CLI')](https://i.imgur.com/evAZjvS.png 'A sample screenshot of the Tamagoshi CLI')
 
+## Linting & Testing
+
+The application is configured for usage with ESLint, Prettier and Jest, all of which are covered by the package file. However, for a full experience, it is recommended that you also install these extensions in your IDE (the recommended IDE for this project is Visual Studio Code).
+
+Linting is automatically run before testing, so to perform both, simply run `npm test`.
+
 ## Features
 
 In this version of the game, there are currently 5 key features, which you'll need to keep on top of in order to get your Tamgotchi to the maximum age. **Keep an eye out**, because when one of the features is in danger of killing your Tamigotchi, it'll change colour!
