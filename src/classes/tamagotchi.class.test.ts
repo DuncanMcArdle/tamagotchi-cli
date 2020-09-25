@@ -1,11 +1,9 @@
 import Tamagotchi from './tamagotchi.class';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { maxAge, maxFood, maxEnergy, poopingThreshold, maxPoop, maxTimeSpentDiseased } = require('../constants');
+import constants from '../constants';
 
 describe('Tamagotchi', () => {
 	let tamagotchi: Tamagotchi;
-	const startingFood = maxFood - 1;
+	const startingFood = constants.maxFood - 1;
 
 	beforeEach(() => {
 		tamagotchi = new Tamagotchi(startingFood);
@@ -75,7 +73,7 @@ describe('Tamagotchi', () => {
 			const spy = jest.spyOn(tamagotchi, 'die');
 
 			// Age the pet to the maximum age
-			for (let i = 0; i < maxAge; i += 1) {
+			for (let i = 0; i < constants.maxAge; i += 1) {
 				tamagotchi.increaseAge();
 
 				// Feed, clean and heal the pet to ensure it doesn't die for other reasons
@@ -85,7 +83,7 @@ describe('Tamagotchi', () => {
 			}
 
 			// Check that the pet has reached maximum age
-			expect(tamagotchi.getAge()).toBe(maxAge);
+			expect(tamagotchi.getAge()).toBe(constants.maxAge);
 
 			// Check that the die function was called appropriately
 			expect(spy).toHaveBeenCalledWith('old age');
@@ -118,26 +116,26 @@ describe('Tamagotchi', () => {
 
 		test('Pet loses energy whilst awake', () => {
 			tamagotchi.increaseAge();
-			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 		});
 
 		test('Pet gains energy whilst asleep', () => {
 			// Reduce the pet's energy by ageing it
 			tamagotchi.increaseAge();
-			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 
 			// Put the pet to sleep and then age it, in order to recover energy
 			tamagotchi.putToSleep();
 			tamagotchi.increaseAge();
 
 			// Check that the pet's energy has risen back up
-			expect(tamagotchi.getEnergy()).toBe(maxEnergy);
+			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy);
 		});
 
 		test('Pet does not go above max energy whilst asleep', () => {
 			// Reduce the pet's energy by ageing it
 			tamagotchi.increaseAge();
-			expect(tamagotchi.getEnergy()).toBe(maxEnergy - 1);
+			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy - 1);
 
 			// Put the pet to sleep and then age it, in order to recover energy
 			tamagotchi.putToSleep();
@@ -146,37 +144,24 @@ describe('Tamagotchi', () => {
 			tamagotchi.increaseAge();
 
 			// Check that the pet's energy has risen back up
-			expect(tamagotchi.getEnergy()).toBe(maxEnergy);
+			expect(tamagotchi.getEnergy()).toBe(constants.maxEnergy);
 		});
 
 		test('Pet automatically goes to sleep when out of energy', () => {
-			// Use up all of the pet's energy
-			for (let i = 0; i < maxEnergy; i += 1) {
-				tamagotchi.increaseAge();
+			// Use up almost all of the pet's energy
+			tamagotchi.energy = 1;
 
-				// Feed, clean and heal the pet to ensure it doesn't die
-				tamagotchi.feed();
-				tamagotchi.clean();
-				tamagotchi.heal();
-			}
+			// Age the pet (uses up the last bit of energy)
+			tamagotchi.increaseAge();
 
 			// Check that the pet has fallen asleep
 			expect(tamagotchi.isSleeping()).toBe(true);
 		});
 
 		test("Pet can't wake without any energy", () => {
-			// Use up all of the pet's energy
-			for (let i = 0; i < maxEnergy; i += 1) {
-				tamagotchi.increaseAge();
-
-				// Feed, clean and heal the pet to ensure it doesn't die
-				tamagotchi.feed();
-				tamagotchi.clean();
-				tamagotchi.heal();
-			}
-
-			// Check that the pet has fallen asleep
-			expect(tamagotchi.isSleeping()).toBe(true);
+			// Use up all of the pet's energy and put it to sleep
+			tamagotchi.energy = 0;
+			tamagotchi.sleeping = true;
 
 			// Check that the pet is unable to wake up
 			expect(tamagotchi.wakeUp()).toMatch("Your pet doesn't have the energy to wake up yet");
@@ -198,7 +183,7 @@ describe('Tamagotchi', () => {
 			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop
-			for (let i = 0; i < poopingThreshold; i += 1) {
+			for (let i = 0; i < constants.poopingThreshold; i += 1) {
 				tamagotchi.feed();
 			}
 
@@ -211,7 +196,7 @@ describe('Tamagotchi', () => {
 			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop the maximum amount
-			for (let i = 0; i < maxPoop * poopingThreshold; i += 1) {
+			for (let i = 0; i < constants.maxPoop * constants.poopingThreshold; i += 1) {
 				tamagotchi.feed();
 			}
 
@@ -224,7 +209,7 @@ describe('Tamagotchi', () => {
 			tamagotchi = new Tamagotchi(1);
 
 			// Feed the pet enough to make it poop
-			for (let i = 0; i < poopingThreshold; i += 1) {
+			for (let i = 0; i < constants.poopingThreshold; i += 1) {
 				tamagotchi.feed();
 			}
 
@@ -248,20 +233,62 @@ describe('Tamagotchi', () => {
 			expect(tamagotchi.isDiseased()).toBe(false);
 		});
 
-		test('Pet dies when not healed from disease quickly enough', () => {
+		test("Pet's time with disease increments", () => {
 			// Manually disease the pet
 			tamagotchi.diseased = true;
 
-			// Age the pet to the point of death by disease
-			for (let i = 0; i < maxTimeSpentDiseased; i += 1) {
-				tamagotchi.increaseAge();
+			// Age the pet
+			tamagotchi.increaseAge();
 
-				// Feed and clean the pet to ensure it doesn't die for other reasons
-				tamagotchi.feed();
-				tamagotchi.clean();
-			}
+			// Expect the pet's time with disease counter to have incremented
+			expect(tamagotchi.timeSpentDiseased).toBe(1);
+		});
 
-			// Expect the pet to have died
+		test('Pet dies when not healed from disease quickly enough', () => {
+			// Spy on the death function
+			const spy = jest.spyOn(tamagotchi, 'die');
+
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Set the pet as about to die from disease
+			tamagotchi.timeSpentDiseased = constants.maxTimeSpentDiseased - 1;
+
+			// Age the pet
+			tamagotchi.increaseAge();
+
+			// Check that the die function was called appropriately
+			expect(spy).toHaveBeenCalledWith('disease');
+
+			// Check that the pet has died
+			expect(tamagotchi.isAlive()).toBe(false);
+		});
+
+		test('Healing can succeed', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Manually set the chance of healing to 100%
+			constants.chanceOfHealing = 100;
+
+			// Attempt to heal the pet
+			tamagotchi.heal();
+
+			// Expect the pet to have been healed
+			expect(tamagotchi.isDiseased()).toBe(false);
+		});
+
+		test('Healing can fail', () => {
+			// Manually disease the pet
+			tamagotchi.diseased = true;
+
+			// Manually set the chance of healing to 0%
+			constants.chanceOfHealing = 0;
+
+			// Attempt to heal the pet
+			tamagotchi.heal();
+
+			// Expect the pet to have not been healed
 			expect(tamagotchi.isDiseased()).toBe(true);
 		});
 	});

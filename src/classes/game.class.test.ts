@@ -3,7 +3,7 @@ import Game from './game.class';
 import Tamagotchi from './tamagotchi.class';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { tickRate } = require('../constants');
+import constants from '../constants';
 
 describe('Game', () => {
 	let game: Game;
@@ -34,7 +34,7 @@ describe('Game', () => {
 		game.processKeyPress(key);
 
 		// Wait for 1 tick
-		await new Promise((r) => setTimeout(r, tickRate));
+		await new Promise((r) => setTimeout(r, constants.tickRate));
 
 		// Check that the tick function was called
 		expect(spy).toHaveBeenCalled();
@@ -170,8 +170,8 @@ describe('Game', () => {
 	});
 
 	test('User is notified of their pets disease once contracted', () => {
-		// Assign a dummy function to chalk.red
-		Object.defineProperty(chalk, 'red', { value: jest.fn() });
+		// Spy on the console log
+		const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(jest.fn());
 
 		// Give the pet a disease
 		game.tamagotchi.diseased = true;
@@ -179,7 +179,8 @@ describe('Game', () => {
 		// Call for the console to be updated
 		game.updateConsole();
 
-		// Check that the disease has been reported in red
-		expect(chalk.red).toHaveBeenCalled();
+		// Check that the user was informed of a disease
+		const testString = `WARNING: Your pet has a disease! It will die in ${constants.maxTimeSpentDiseased} seconds if you do not (h)eal it`;
+		expect(consoleLogSpy).toHaveBeenCalledWith(chalk.red(testString));
 	});
 });
